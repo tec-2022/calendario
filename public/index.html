@@ -590,65 +590,6 @@
       }, 3000);
     }
    
- (function () {
-  const go404 = () => {
-    if (!location.pathname.endsWith('/404.html')) location.assign('/404.html');
-  };
-
-  const abs = (u) => { try { return new URL(u, document.baseURI); } catch { return null; } };
-  const isSameOrigin = (u) => { const a = abs(u); return a && a.origin === location.origin; };
-
-  let redirected = false;
-  const safe404 = () => {
-    if (redirected) return;
-    redirected = true;
-    setTimeout(go404, 200);
-  };
-
-  // HEAD para confirmar que realmente es un 404 (solo mismo origen por CORS)
-  async function checkIf404(url) {
-    const a = abs(url);
-    if (!a || !isSameOrigin(a.href)) return; // ignorar CDNs/terceros
-    try {
-      const res = await fetch(a.href, {
-        method: 'HEAD',
-        cache: 'no-store',
-        credentials: 'same-origin'
-      });
-      if (res.status === 404) safe404();    // solo 404 ⇒ redirige
-      // 200/301/403/500 ⇒ NO redirige
-    } catch {
-      // offline/CORS/otros fallos ⇒ NO redirige
-    }
-  }
-
-  // Errores de carga de recursos (script/link/img): valida con HEAD si es 404
-  window.addEventListener('error', (e) => {
-    const t = e.target;
-    const isAsset = t instanceof HTMLScriptElement || t instanceof HTMLLinkElement || t instanceof HTMLImageElement;
-    if (!isAsset) return;
-
-    const url = t.tagName === 'LINK' ? t.href : t.src;
-    checkIf404(url);
-  }, true);
-
-  // Promesas rechazadas (p.ej. fetch): solo si exponen status 404
-  window.addEventListener('unhandledrejection', (e) => {
-    const r = e.reason || {};
-    const status = r.status ?? r.response?.status;
-    const url = r.url ?? r.response?.url;
-    if (status === 404 && isSameOrigin(url)) safe404();
-  });
-
-  // (Opcional) Si tu hosting devuelve 200 en rutas desconocidas (SPA fallback),
-  // valida la ruta actual contra una lista de páginas conocidas y confirma con HEAD.
-  const knownPaths = new Set([
-    '/', '/index.html', '/events.html', '/tasks.html', '/notes.html', '/settings.html', '/404.html'
-  ]);
-  if (!knownPaths.has(location.pathname)) {
-    checkIf404(location.pathname);
-  }
-})();
   </script>
   
 </body>
