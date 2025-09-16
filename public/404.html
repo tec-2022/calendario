@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página no encontrada | Calendario de Pareja ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script>
+    tailwind.config = { 
+      darkMode:'class', 
+      theme:{ 
+        extend:{ 
+          colors:{ 
+            brand:'#ef476f', 
+            accent:'#6c5ce7', 
+            skysoft:'#5ec3ff',
+            darkBg: '#0f0b1e',
+            darkBg2: '#1b1333',
+            darkBg3: '#22163e',
+            darkBg4: '#2b1d52'
+          }, 
+          boxShadow:{ 
+            soft:'0 10px 30px rgba(0,0,0,.25)',
+            glow: '0 0 20px 10px rgba(239,71,111,0.15)'
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-gentle': 'pulse-gentle 2s ease-in-out infinite',
+            'heartbeat': 'heartbeat 1.5s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' }
+            },
+            'pulse-gentle': {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0.7' }
+            },
+            heartbeat: {
+              '0%': { transform: 'scale(1)' },
+              '15%': { transform: 'scale(1.1)' },
+              '30%': { transform: 'scale(1)' },
+              '45%': { transform: 'scale(1.05)' },
+              '60%': { transform: 'scale(1)' }
+            }
+          }
+        }, 
+        fontFamily:{ 
+          sans:['Inter','ui-sans-serif','system-ui'] 
+        } 
+      } 
+    }
+  </script>
+  <style>
+    :root{
+      --brand:#ef476f;
+      --accent:#6c5ce7;
+      --skysoft:#5ec3ff;
+    }
+
+    .btn-primary{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.85rem 1.8rem;
+      border:none; border-radius:1rem;
+      font-weight:700;
+      color:#fff;
+      background:linear-gradient(135deg,var(--brand),var(--accent));
+      box-shadow:0 12px 28px rgba(239,71,111,.25);
+      transition:transform .3s ease, box-shadow .3s ease, filter .3s ease;
+      position:relative; overflow:hidden;
+      text-decoration: none;
+    }
+    .btn-primary::before{
+      content:'';
+      position:absolute; inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+      transform:translateX(-100%);
+      transition:transform .8s ease;
+    }
+    .btn-primary:hover::before{ transform:translateX(100%); }
+    .btn-primary:hover{
+      transform:translateY(-3px) scale(1.03);
+      box-shadow:0 20px 40px rgba(239,71,111,.35), 0 0 30px rgba(239,71,111,0.2);
+      filter:brightness(1.1);
+    }
+    .btn-primary:active{ transform:translateY(-1px) scale(1.01); }
+
+    .gradient-text {
+      background:linear-gradient(135deg,var(--brand),var(--accent),var(--skysoft));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      background-size: 200% 200%;
+      animation: gradient-shift 3s ease infinite;
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Reemplaza tu regla .floating-hearts por esta */
+.floating-hearts{
+  position: fixed;
+  inset: 0;            /* top:0 right:0 bottom:0 left:0 */
+  pointer-events: none;
+  z-index: -10;
+}
+
+    .heart {
+      position: absolute;
+      opacity: 0;
+      animation: float-heart 8s linear infinite;
+    }
+
+    @keyframes float-heart {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .btn-primary, .btn-primary::before, .gradient-text, .heart { 
+        animation: none !important;
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-darkBg text-slate-100 overflow-x-hidden">
+  <!-- Floating Hearts Background -->
+  <div class="floating-hearts" id="hearts-container"></div>
+
+  <!-- Gradient Background -->
+  <div class="fixed inset-0 -z-20 pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-br from-darkBg2 via-darkBg3 to-darkBg4"></div>
+    <div class="absolute -top-24 -left-24 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-brand/30 to-accent/30 animate-pulse-gentle"></div>
+    <div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-skysoft/30 to-accent/30 animate-pulse-gentle"></div>
+    <div class="absolute top-1/4 left-1/4 h-64 w-64 rounded-full blur-2xl bg-gradient-to-br from-accent/20 to-brand/20 animate-float"></div>
+  </div>
+
+  <main class="min-h-screen flex items-center justify-center px-6 py-12">
+    <div class="max-w-md mx-auto" data-aos="fade-up" data-aos-duration="800">
+      <div class="text-center">
+        <div class="text-8xl font-black gradient-text mb-4" data-aos="zoom-in" data-aos-delay="200">
+          404
+        </div>
+        
+        <h1 class="text-3xl font-extrabold mb-3" data-aos="fade-up" data-aos-delay="300">
+          Página no encontrada
+        </h1>
+        
+        <p class="text-white/80 text-lg mb-8 leading-relaxed" data-aos="fade-up" data-aos-delay="400">
+          Parece que este amor se perdió por el camino…<br>
+          Pero siempre puedes volver al inicio
+        </p>
+
+        <!-- Animated Heart Container -->
+        <div class="relative mx-auto my-8 h-48 w-48 mb-8" data-aos="zoom-in" data-aos-delay="500">
+          <div class="absolute inset-0 rounded-full bg-gradient-to-br from-brand/40 to-accent/40 blur-2xl animate-pulse"></div>
+          <div class="absolute left-8 top-12 text-5xl animate-float" style="animation-delay: 0s;">👩‍❤️‍👨</div>
+          <div class="absolute right-8 bottom-12 text-5xl animate-float" style="animation-delay: 1s;">💞</div>
+          <div class="absolute left-16 bottom-8 text-3xl animate-heartbeat">💖</div>
+          <div class="absolute right-12 top-8 text-3xl animate-heartbeat" style="animation-delay: 0.5s;">💘</div>
+        </div>
+
+        <a href="/index.html" class="btn-primary text-lg" data-aos="fade-up" data-aos-delay="600">
+          <i data-feather="home" class="w-5 h-5"></i>
+          Volver al inicio
+        </a>
+
+        <p class="text-white/60 text-sm mt-6" data-aos="fade-up" data-aos-delay="700">
+          ¿Necesitas ayuda? <a href="/contacto.html" class="text-skysoft hover:text-white transition-colors">Contáctanos</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Initialize animations
+  AOS.init({
+    duration: 800,
+    once: true,
+    easing: 'ease-out-cubic'
+  });
+
+  // Create floating hearts
+  function createHearts() {
+    const container = document.getElementById('hearts-container');
+    const hearts = ['❤️', '💕', '💓', '💗', '💖', '💘'];
+    for (let i = 0; i < 15; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.fontSize = (Math.random() * 20 + 16) + 'px';
+      heart.style.animationDelay = (Math.random() * 5) + 's';
+      heart.style.animationDuration = (Math.random() * 3 + 6) + 's';
+      container.appendChild(heart);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    createHearts();
+    feather.replace();
+
+    // Parallax solo si NO se prefiere reducir movimiento
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const onMove = (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        document.querySelector('main').style.transform = `translate(${x}px, ${y}px)`;
+      };
+      document.addEventListener('mousemove', onMove);
+    }
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendario de Pareja ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#ef476f',
+            accent: '#6c5ce7',
+            skysoft: '#5ec3ff',
+            dark: {
+              900: '#0f0b1e',
+              800: '#1b1333',
+              700: '#22163e',
+              600: '#2b1d52'
+            }
+          },
+          boxShadow: {
+            'soft': '0 10px 30px rgba(0,0,0,.25)',
+            'glow': '0 0 20px rgba(239, 71, 111, 0.15)'
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-bg {
+      background: linear-gradient(135deg, #1b1333 0%, #22163e 50%, #2b1d52 100%);
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ef476f 0%, #6c5ce7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+    }
+    
+    .input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .input:focus {
+      outline: none;
+      border-color: #ef476f;
+      box-shadow: 0 0 0 3px rgba(239, 71, 111, 0.1);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #6c5ce7 0%, #5ec3ff 100%);
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
+    }
+    
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+    
+    .chip:hover {
+      background: rgba(239, 71, 111, 0.1);
+      border-color: rgba(239, 71, 111, 0.3);
+    }
+    
+    .kanban-col {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      min-height: 400px;
+    }
+    
+    .kanban-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
+    }
+    
+    .kanban-col[data-col="pendiente"] .kanban-title {
+      color: #ef476f;
+      border-bottom-color: rgba(239, 71, 111, 0.3);
+    }
+    
+    .kanban-col[data-col="progreso"] .kanban-title {
+      color: #5ec3ff;
+      border-bottom-color: rgba(94, 195, 255, 0.3);
+    }
+    
+    .kanban-col[data-col="hecha"] .kanban-title {
+      color: #00c853;
+      border-bottom-color: rgba(0, 200, 83, 0.3);
+    }
+    
+    .kanban-drop {
+      min-height: 350px;
+    }
+    
+    .task-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      cursor: grab;
+      transition: all 0.3s ease;
+    }
+    
+    .task-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ef476f, #6c5ce7);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    
+    .floating-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .particle {
+      position: absolute;
+      background: linear-gradient(135deg, #ef476f, #6c5ce7);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-dark-900 text-slate-100 font-sans">
+  <div class="floating-particles" id="particles"></div>
+  
+  <div class="fixed inset-0 -z-10 pointer-events-none">
+    <div class="absolute inset-0 gradient-bg"></div>
+    <div class="absolute -top-24 -left-24 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-brand/30 to-accent/30"></div>
+    <div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-skysoft/30 to-accent/30"></div>
+  </div>
+  
+  <header class="sticky top-0 z-30 backdrop-blur-lg bg-dark-800/80 border-b border-white/10">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3" data-aos="fade-right">
+        <a href="/index.html" class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-accent text-white shadow-glow">
+          <i data-feather="heart"></i>
+        </a>
+        <span class="font-extrabold text-xl bg-gradient-to-r from-brand to-accent bg-clip-text text-transparent">Calendario de Pareja</span>
+      </div>
+      
+      <div class="flex items-center gap-3 text-sm" data-aos="fade-left">
+        <a class="chip hover:bg-brand/10 hover:border-brand/20" href="/index.html">
+          <i data-feather="home" class="w-4 h-4 mr-1"></i>Dashboard
+        </a>
+        <a class="chip hover:bg-brand/10 hover:border-brand/20" href="/events.html">
+          <i data-feather="calendar" class="w-4 h-4 mr-1"></i>Eventos
+        </a>
+        <a class="chip bg-brand/10 border-brand/20 text-brand" href="/tasks.html">
+          <i data-feather="check-square" class="w-4 h-4 mr-1"></i>Tareas
+        </a>
+        <a class="chip hover:bg-brand/10 hover:border-brand/20" href="/notes.html">
+          <i data-feather="edit" class="w-4 h-4 mr-1"></i>Notas
+        </a>
+        <a class="chip hover:bg-brand/10 hover:border-brand/20" href="/settings.html">
+          <i data-feather="settings" class="w-4 h-4 mr-1"></i>Ajustes
+        </a>
+        <!-- DESPUÉS (inicia oculto, tu script lo muestra al detectar sesión) -->
+        <button id="logoutBtn" class="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand to-accent text-white font-semibold shadow-glow hover:shadow-xl transition-all duration-300 hidden">
+          <i data-feather="log-out" class="w-4 h-4 mr-1"></i>Salir
+        </button>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    <div class="card shadow-soft" data-aos="fade-up">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="card-title">✅ Gestión de Tareas</h2>
+        <div class="flex items-center gap-2 text-sm text-white/60">
+          <i data-feather="filter" class="w-4 h-4"></i>
+          <span>Filtrar tareas</span>
+        </div>
+      </div>
+      
+      <div class="flex gap-3 items-center bg-dark-700/50 p-4 rounded-xl mb-6">
+        <input id="taskDesc" class="input flex-1" placeholder="✏️ Escribe una nueva tarea…" data-aos="fade-right">
+        <button id="addTaskBtn" class="btn-secondary flex items-center gap-2" data-aos="fade-left">
+          <i data-feather="plus" class="w-4 h-4"></i>Agregar
+        </button>
+      </div>
+      
+      <div class="grid lg:grid-cols-3 gap-6" id="kanban" data-aos="zoom-in">
+        <div class="kanban-col" data-col="pendiente">
+          <h4 class="kanban-title flex items-center gap-2">
+            <i data-feather="clock" class="w-5 h-5"></i>Pendiente
+          </h4>
+          <div class="kanban-drop" id="col-pendiente"></div>
+        </div>
+        
+        <div class="kanban-col" data-col="progreso">
+          <h4 class="kanban-title flex items-center gap-2">
+            <i data-feather="play" class="w-5 h-5"></i>En curso
+          </h4>
+          <div class="kanban-drop" id="col-progreso"></div>
+        </div>
+        
+        <div class="kanban-col" data-col="hecha">
+          <h4 class="kanban-title flex items-center gap-2">
+            <i data-feather="check-circle" class="w-5 h-5"></i>Hechas
+          </h4>
+          <div class="kanban-drop" id="col-hecha"></div>
+        </div>
+      </div>
+      
+      <div class="mt-6 p-4 bg-dark-700/30 rounded-xl">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm font-medium text-white/80">Progreso general</span>
+          <span class="text-sm text-brand font-semibold" id="progressPercentage">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="mt-2 text-xs text-white/60" id="taskProgress">0 de 0 tareas completadas</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Particulas flotantes
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.width = Math.random() * 20 + 5 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particle.style.animationDuration = Math.random() * 3 + 4 + 's';
+        container.appendChild(particle);
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out-quad',
+        once: true
+      });
+      feather.replace();
+    });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/config/supabaseClient.js"></script>
+  <script type="module" src="/src/guard.js"></script>
+  <script type="module" src="/src/tasks.js"></script>
+<script type="module">
+  import { supabase } from '/config/supabaseClient.js';
+
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  // Muestra el botón si hay sesión activa
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) logoutBtn?.classList.remove('hidden');
+  });
+
+  // Cerrar sesión
+  logoutBtn?.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    location.href = '/login.html';
+  });
+</script>
+</body>
+</html>

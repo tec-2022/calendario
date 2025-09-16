@@ -1,0 +1,18 @@
+:root{ --ring: 0 0% 100%; }
+.glass{ background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.12); }
+.card{ background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.12); border-radius:1.25rem; padding:1rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.card-title{ font-weight:800; font-size:1.125rem; }
+.input{ background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:.75rem; padding:.5rem .75rem; outline:none; }
+.input-sm{ height:2.25rem; }
+.btn-primary{ background: linear-gradient(90deg, #ef476f, #6c5ce7); color:white; border-radius:.75rem; padding:.6rem .9rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.btn-secondary{ background: rgba(255,255,255,.12); color:white; border-radius:.75rem; padding:.5rem .75rem; }
+.btn-rose{ background:#ef476f; color:white; border-radius:.75rem; padding:.5rem .75rem; }
+.btn-sm{ font-size:.85rem; padding:.4rem .6rem; }
+.btn-tab{ border-radius:.75rem; padding:.5rem .75rem; background: rgba(255,255,255,.08); }
+.btn-tab.is-active{ background: rgba(255,255,255,.18); }
+.label{ display:block; font-size:.75rem; opacity:.8; margin-bottom:.25rem; text-transform:uppercase; }
+.chip{ padding:.4rem .7rem; background: rgba(255,255,255,.10); border-radius:.6rem; }
+.kanban-col{ background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:1rem; padding: .75rem; }
+.kanban-title{ font-weight:600; opacity:.9; margin-bottom:.4rem; }
+.kanban-drop{ min-height:120px; }
+.note{ padding:.75rem; border-radius:1rem; background: linear-gradient(135deg, rgba(108,92,231,.25), rgba(239,71,111,.25)); border:1px solid rgba(255,255,255,.12); }

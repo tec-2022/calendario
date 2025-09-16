@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendario de Pareja ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Feather: deja SOLO uno -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <script>
+    tailwind.config = { 
+      darkMode:'class', 
+      theme:{ 
+        extend:{ 
+          colors:{ 
+            brand:'#ef476f', 
+            accent:'#6c5ce7', 
+            skysoft:'#5ec3ff',
+            dark: {
+              900: '#0f0b1e',
+              800: '#1b1333',
+              700: '#22163e',
+              600: '#2b1d52'
+            }
+          }, 
+          boxShadow:{ 
+            soft:'0 10px 30px rgba(0,0,0,.25)',
+            glow: '0 0 20px rgba(239, 71, 111, 0.3)'
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }, 
+        fontFamily:{ 
+          sans:['Inter','ui-sans-serif','system-ui'] 
+        } 
+      },
+      // ✅ Garantiza que el CDN genere estas clases usadas en JS
+      safelist: [
+        'bg-pink-500/20','text-pink-300',
+        'bg-yellow-500/20','text-yellow-300',
+        'bg-blue-500/20','text-blue-300',
+        'bg-green-500/20','text-green-300',
+        'bg-gray-500/20','text-gray-300'
+      ]
+    }
+  </script>
+
+  <style>
+    /* ==== Estilos mejorados ==== */
+    .chip{
+      padding:.5rem 1rem;border-radius:.75rem;border:1px solid rgba(255,255,255,.12);
+      color:#e5e7eb;background:rgba(255,255,255,.05);
+      display:inline-flex;align-items:center;gap:.5rem;
+      transition:all .3s ease;font-weight:600;
+      position:relative;overflow:hidden;
+    }
+    .chip::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    .chip:hover::before { left: 100%; }
+    .chip:hover{
+      background:linear-gradient(135deg, rgba(239,71,111,.15), rgba(108,92,231,.15));
+      box-shadow:0 8px 25px rgba(108,92,231,.2), 0 0 15px rgba(108,92,231,.1);
+      transform:translateY(-2px);border-color:rgba(108,92,231,.3)
+    }
+    .chip.active{
+      background:linear-gradient(135deg,#ef476f,#6c5ce7);
+      box-shadow:0 8px 25px rgba(239,71,111,.3), 0 0 20px rgba(239,71,111,.2);
+      border-color:transparent;color:#fff
+    }
+
+    .card{
+      background:linear-gradient(135deg,rgba(26,21,48,.95),rgba(32,25,58,.95));
+      border:1px solid rgba(255,255,255,.15);border-radius:1.5rem;padding:2rem;
+      backdrop-filter:blur(20px);box-shadow:0 20px 40px rgba(0,0,0,.3);
+      transition:transform .3s ease, box-shadow .3s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+    .card:hover{ transform:translateY(-5px) scale(1.01); box-shadow:0 25px 50px rgba(0,0,0,.4), 0 0 30px rgba(108,92,231,.2) }
+    .card-title{
+      font-weight:800;font-size:1.5rem;display:flex;align-items:center;gap:.75rem;
+      background:linear-gradient(135deg,#ef476f 0%,#6c5ce7 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .input{
+      width:100%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);
+      border-radius:1rem;padding:.75rem 1.25rem;outline:none;color:#fff;font-size:1rem;
+      transition:all .3s ease;font-family:inherit;position:relative;
+    }
+    .input::placeholder{color:rgba(255,255,255,.5)}
+    .input:focus{
+      border-color:#6c5ce7;
+      box-shadow:0 0 0 4px rgba(108,92,231,.2), 0 0 20px rgba(108,92,231,.1);
+      background:rgba(255,255,255,.12);transform:translateY(-2px)
+    }
+    .input-sm{height:3rem}
+
+    select.input{
+      -webkit-appearance:none;appearance:none;
+      background-image:
+        linear-gradient(45deg,transparent 50%,#6c5ce7 50%),
+        linear-gradient(135deg,#6c5ce7 50%,transparent 50%);
+      background-position: calc(100% - 20px) calc(50% - 2px), calc(100% - 15px) calc(50% - 2px);
+      background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:2.2rem
+    }
+    
+    #eventCategory.input{color:#fff}
+    #eventCategory option{color:#0f172a;background:#fff}
+
+    .btn-primary{
+      background:linear-gradient(135deg,#ef476f,#ff6b8b);color:#fff;border:none;font-weight:700;
+      border-radius:1rem;padding:.75rem 1.25rem;cursor:pointer;transition:all .3s ease;
+      box-shadow:0 10px 30px rgba(239,71,111,.3);display:inline-flex;align-items:center;gap:.5rem;
+      position:relative;overflow:hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover{
+      transform:translateY(-3px) scale(1.03);
+      box-shadow:0 15px 35px rgba(239,71,111,.4), 0 0 25px rgba(239,71,111,.3);
+      filter:brightness(1.06)
+    }
+    .btn-sm{font-size:.95rem;padding:.6rem 1.1rem;border-radius:.9rem}
+
+    .event-item {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin: 0.5rem 0;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .event-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border-color: rgba(108,92,231,0.3);
+    }
+
+    .category-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .floating-hearts {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: -1;
+    }
+    .heart { position: absolute; opacity: 0; animation: float 6s ease-in-out infinite; color: rgba(239, 71, 111, 0.3); }
+  </style>
+</head>
+<body class="min-h-screen bg-dark-900 text-slate-100">
+  <div class="floating-hearts" id="floatingHearts"></div>
+  
+  <div class="fixed inset-0 -z-10 pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-br from-dark-800 via-dark-700 to-dark-600"></div>
+    <div class="absolute -top-24 -left-24 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-brand/30 to-accent/30 animate-pulse-slow"></div>
+    <div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-skysoft/30 to-accent/30 animate-float"></div>
+    <div class="absolute top-1/4 left-1/4 h-64 w-64 rounded-full blur-2xl bg-gradient-to-br from-brand/20 to-skysoft/20 animate-pulse-slow" style="animation-delay: 1s;"></div>
+  </div>
+
+  <header class="sticky top-0 z-30 backdrop-blur-lg bg-black/30 border-b border-white/10 shadow-lg">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <a href="/index.html" class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-accent text-white shadow-glow transform transition-transform hover:scale-110">
+          <i data-feather="heart" class="w-5 h-5"></i>
+        </a>
+        <span class="font-extrabold text-xl bg-gradient-to-r from-brand to-accent bg-clip-text text-transparent">Calendario de Pareja</span>
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <a class="chip" href="/index.html">
+          <i data-feather="home" class="w-4 h-4"></i>Dashboard
+        </a>
+        <a class="chip active" href="/events.html">
+          <i data-feather="calendar" class="w-4 h-4"></i>Eventos
+        </a>
+        <a class="chip" href="/tasks.html">
+          <i data-feather="check-square" class="w-4 h-4"></i>Tareas
+        </a>
+        <a class="chip" href="/notes.html">
+          <i data-feather="file-text" class="w-4 h-4"></i>Notas
+        </a>
+        <a class="chip" href="/settings.html">
+          <i data-feather="settings" class="w-4 h-4"></i>Ajustes
+        </a>
+        <button id="logoutBtn" class="ml-2 px-4 py-2 rounded-lg bg-gradient-to-r from-brand to-pink-500 text-white font-semibold shadow-md hover:shadow-lg transform transition-transform hover:scale-105 hidden">
+          <i data-feather="log-out" class="w-4 h-4 mr-1"></i>Salir
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8" data-aos="fade-up">
+    <div class="card">
+      <h2 class="card-title">
+        <i data-feather="calendar" class="w-6 h-6"></i>Eventos
+      </h2>
+      
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <input type="datetime-local" id="eventDate" class="input input-sm" data-aos="fade-right" data-aos-delay="100">
+        <input id="eventTitle" class="input input-sm" placeholder="Título del evento" data-aos="fade-right" data-aos-delay="150">
+        <select id="eventCategory" class="input input-sm" data-aos="fade-right" data-aos-delay="200">
+          <option value="cita">💕 Cita</option>
+          <option value="aniversario">🎂 Aniversario</option>
+          <option value="viaje">✈️ Viaje</option>
+          <option value="pago">💳 Pago</option>
+          <option value="otro">📌 Otro</option>
+        </select>
+        <button id="addEventBtn" class="btn-primary btn-sm" data-aos="fade-right" data-aos-delay="250">
+          <i data-feather="plus" class="w-4 h-4"></i>Agregar
+        </button>
+      </div>
+
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold text-slate-300 mb-4">Próximos Eventos</h3>
+        <div id="eventsList" class="space-y-3"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Animación de corazones flotantes
+    function createHearts() {
+      const container = document.getElementById('floatingHearts');
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement('div');
+        heart.innerHTML = '<i data-feather="heart" class="w-4 h-4"></i>';
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 6 + 's';
+        heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+        container.appendChild(heart);
+      }
+      feather.replace();
+    }
+
+    // ✅ Clases reales por categoría (coinciden con el safelist)
+    function getCategoryClasses(category) {
+      const map = {
+        cita: 'bg-pink-500/20 text-pink-300',
+        aniversario: 'bg-yellow-500/20 text-yellow-300',
+        viaje: 'bg-blue-500/20 text-blue-300',
+        pago: 'bg-green-500/20 text-green-300',
+        otro: 'bg-gray-500/20 text-gray-300'
+      };
+      return map[category] || map.otro;
+    }
+
+    function getCategoryIcon(category) {
+      const icons = { cita:'💕', aniversario:'🎂', viaje:'✈️', pago:'💳', otro:'📌' };
+      return icons[category] || '📌';
+    }
+
+    function getCategoryName(category) {
+      const names = { cita:'Cita', aniversario:'Aniversario', viaje:'Viaje', pago:'Pago', otro:'Otro' };
+      return names[category] || 'Otro';
+    }
+
+    // Ejemplo de eventos (simulado)
+    function loadSampleEvents() {
+      const eventsList = document.getElementById('eventsList');
+      const sampleEvents = [
+        { date: '2024-01-15T19:00', title: 'Cena romántica', category: 'cita' },
+        { date: '2024-02-14T00:00', title: 'Día de San Valentín', category: 'aniversario' },
+        { date: '2024-03-20T08:00', title: 'Viaje a la playa', category: 'viaje' }
+      ];
+
+      sampleEvents.forEach(event => {
+        const eventElement = document.createElement('div');
+        eventElement.className = 'event-item';
+        const when = new Date(event.date).toLocaleString();
+        const badgeClasses = getCategoryClasses(event.category);
+        eventElement.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-semibold">${event.title}</h4>
+              <p class="text-sm text-slate-400">${when}</p>
+            </div>
+            <span class="category-badge ${badgeClasses}">
+              ${getCategoryIcon(event.category)} ${getCategoryName(event.category)}
+            </span>
+          </div>
+        `;
+        eventsList.appendChild(eventElement);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({ duration: 800, easing: 'ease-out-quad', once: true });
+      createHearts();
+      loadSampleEvents();
+      feather.replace();
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/config/supabaseClient.js"></script>
+  <script type="module" src="/src/guard.js"></script>
+  <script type="module" src="/src/calendar.js"></script>
+</body>
+</html>

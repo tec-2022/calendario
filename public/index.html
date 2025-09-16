@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendario de Pareja ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+ 
+  <script>
+    tailwind.config = { 
+      darkMode:'class', 
+      theme:{ 
+        extend:{ 
+          colors:{ 
+            brand:'#ef476f', 
+            accent:'#6c5ce7', 
+            skysoft:'#5ec3ff',
+            lovepink:'#ff6b8b',
+            softpurple:'#a78bfa',
+            card:'#1a1530',
+            muted:'#cbd5e1'
+          }, 
+          boxShadow:{ 
+            soft:'0 10px 30px rgba(0,0,0,.25)',
+            glow:'0 0 20px rgba(239,71,111,0.3)'
+          },
+          fontFamily:{ 
+            sans:['Inter','ui-sans-serif','system-ui'] 
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        } 
+      } 
+    }
+  </script>
+  <style>
+    :root{
+      --brand:#ef476f;
+      --accent:#6c5ce7;
+      --skysoft:#5ec3ff;
+      --card:#1a1530;
+      --muted:#cbd5e1;
+      --lovepink:#ff6b8b;
+      --softpurple:#a78bfa;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0b1e 0%, #1b1333 50%, #2b1d52 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(239, 71, 111, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(108, 92, 231, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ===== Chips del header ===== */
+    .chip{
+      padding:.5rem 1rem;
+      border-radius:.75rem;
+      border:1px solid rgba(255,255,255,.12);
+      color:#e5e7eb;
+      background:rgba(255,255,255,.05);
+      display:inline-flex; align-items:center; gap:.5rem;
+      transition:all .3s ease;
+      font-weight:600;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .chip::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .chip:hover::before {
+      left: 100%;
+    }
+    
+    .chip:hover{
+      background:linear-gradient(135deg, rgba(239,71,111,.15), rgba(108,92,231,.15));
+      box-shadow:0 8px 25px rgba(108,92,231,.2);
+      transform:translateY(-2px);
+      border-color:rgba(108,92,231,.3);
+    }
+    
+    .chip.active{
+      background:linear-gradient(135deg, var(--brand), var(--accent));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 8px 25px rgba(239,71,111,.3);
+    }
+
+    /* ===== Cards ===== */
+    .card{
+      background: linear-gradient(135deg, rgba(26,21,48,.95), rgba(32,25,58,.95));
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:1.5rem;
+      padding:2rem;
+      backdrop-filter: blur(20px);
+      box-shadow:0 20px 40px rgba(0,0,0,.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--brand), var(--accent), var(--skysoft));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .card:hover{
+      transform:translateY(-8px) scale(1.02);
+      box-shadow:0 25px 50px rgba(0,0,0,.4), 0 0 30px rgba(108,92,231,0.2);
+    }
+    
+    .card-title{
+      font-weight:800;
+      font-size:1.5rem;
+      display:flex; align-items:center; gap:.75rem;
+      background:linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent;
+      margin-bottom:1rem;
+      position: relative;
+    }
+    
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      border-radius: 2px;
+    }
+
+    /* ===== Inputs / selects ===== */
+    .input{
+      width:100%;
+      background:rgba(255,255,255,.08);
+      border:2px solid rgba(255,255,255,.2);
+      border-radius:1rem;
+      padding:.75rem 1.25rem;
+      outline:none; color:#fff; font-size:1rem;
+      transition:all .3s ease;
+      font-family:inherit;
+    }
+    
+    .input::placeholder{ 
+      color:rgba(255,255,255,.5); 
+      font-weight:300; 
+    }
+    
+    .input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(108,92,231,.2), 0 0 20px rgba(108,92,231,0.1);
+      background:rgba(255,255,255,.12);
+      transform: translateY(-2px);
+    }
+    
+    .input-sm{ 
+      height:3rem; 
+      padding:.6rem 1rem; 
+      font-size:.95rem; 
+    }
+    
+    select.input{
+      -webkit-appearance:none; 
+      appearance:none;
+      background-image:
+        linear-gradient(45deg,transparent 50%,var(--accent) 50%),
+        linear-gradient(135deg,var(--accent) 50%,transparent 50%);
+      background-position: calc(100% - 20px) calc(50% - 2px),
+                           calc(100% - 15px) calc(50% - 2px);
+      background-size:5px 5px,5px 5px;
+      background-repeat:no-repeat;
+      padding-right:2.2rem;
+    }
+
+    /* ===== Botón primario ===== */
+    .btn-primary{
+      background:linear-gradient(135deg, var(--brand), var(--lovepink));
+      color:#fff; border:none; font-weight:700;
+      border-radius:1rem;
+      padding:.75rem 1.25rem;
+      cursor:pointer;
+      transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow:0 10px 30px rgba(239,71,111,.3);
+      display:inline-flex; align-items:center; gap:.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    
+    .btn-primary:hover{
+      transform:translateY(-4px) scale(1.05);
+      box-shadow:0 15px 35px rgba(239,71,111,.4), 0 0 25px rgba(239,71,111,0.3);
+      filter:brightness(1.1);
+    }
+    
+    .btn-sm{ 
+      font-size:.95rem; 
+      padding:.6rem 1.1rem; 
+      border-radius:.9rem; 
+    }
+
+    /* ===== Listas del calendario ===== */
+    #eventsList li,
+    #upcomingList li{
+      list-style:none;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:.75rem;
+      background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:1rem;
+      padding:1rem 1.25rem;
+      transition:all 0.3s ease;
+      margin-bottom: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #eventsList li::before,
+    #upcomingList li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--brand), var(--accent));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    #eventsList li:hover::before,
+    #upcomingList li:hover::before {
+      opacity: 1;
+    }
+    
+    #eventsList li:hover,
+    #upcomingList li:hover{
+      transform:translateY(-3px);
+      border-color:rgba(239,71,111,.3);
+      box-shadow:0 12px 28px rgba(0,0,0,.3);
+    }
+    
+    #upcomingList{ 
+      padding-left:0;
+    }
+
+    /* Event category colors */
+    .event-cita { border-left: 4px solid #ef476f; }
+    .event-aniversario { border-left: 4px solid #ffb74d; }
+    .event-viaje { border-left: 4px solid #4fc3f7; }
+    .event-pago { border-left: 4px solid #aed581; }
+    .event-otro { border-left: 4px solid #ba68c8; }
+
+    /* Floating hearts animation */
+    .floating-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .heart {
+      position: absolute;
+      font-size: 1.5rem;
+      opacity: 0;
+      animation: float-heart 8s linear infinite;
+    }
+    
+    @keyframes float-heart {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .card {
+        padding: 1.5rem;
+        border-radius: 1rem;
+      }
+      
+      .card-title {
+        font-size: 1.25rem;
+      }
+      
+      .input-sm {
+        height: 2.75rem;
+      }
+      
+      #eventsList li,
+      #upcomingList li {
+        padding: 0.875rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
+    /* Loading animation */
+    .loading-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top: 2px solid var(--brand);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Notification toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    /* Fix legibilidad del popup del <select> */
+#eventCategory.input { color: #fff; }            /* estado cerrado, tema oscuro */
+#eventCategory option {
+  color: #0f172a;               /* texto oscuro en la lista */
+  background-color: #ffffff;    /* fondo claro del menú nativo */
+}
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 font-sans">
+  <!-- Floating hearts background -->
+  <div class="floating-hearts" id="floatingHearts"></div>
+
+  <!-- Notification toast -->
+  <div class="toast hidden" id="notificationToast"></div>
+
+  <header class="sticky top-0 z-50 backdrop-blur-lg bg-black/30 border-b border-white/10 shadow-lg">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3" data-aos="fade-right">
+        <a href="/index.html" class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-accent text-white shadow-lg transform transition-transform hover:scale-110">
+          <i data-feather="heart" class="w-5 h-5"></i>
+        </a>
+        <span class="font-extrabold text-xl bg-gradient-to-r from-brand to-accent bg-clip-text text-transparent">Calendario de Pareja</span>
+      </div>
+      <div class="flex items-center gap-2 text-sm" data-aos="fade-left">
+        <a class="chip active" href="/index.html">
+          <i data-feather="home" class="w-4 h-4"></i>
+          Dashboard
+        </a>
+        <a class="chip" href="/events.html">
+          <i data-feather="calendar" class="w-4 h-4"></i>
+          Eventos
+        </a>
+        <a class="chip" href="/tasks.html">
+          <i data-feather="check-square" class="w-4 h-4"></i>
+          Tareas
+        </a>
+        <a class="chip" href="/notes.html">
+          <i data-feather="edit-3" class="w-4 h-4"></i>
+          Notas
+        </a>
+        <a class="chip" href="/settings.html">
+          <i data-feather="settings" class="w-4 h-4"></i>
+          Ajustes
+        </a>
+        <button id="logoutBtn" class="ml-2 px-4 py-2 rounded-lg bg-gradient-to-r from-brand to-lovepink text-white font-semibold shadow-lg transform transition-transform hover:scale-105 hidden">
+          <i data-feather="log-out" class="w-4 h-4 mr-1"></i>
+          Salir
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-3 gap-8">
+    <section class="card lg:col-span-2" data-aos="fade-up" data-aos-delay="100">
+      <h3 class="card-title">
+        <i data-feather="calendar" class="w-6 h-6"></i>
+        Calendario (vista rápida)
+      </h3>
+      <div class="relative">
+        <ul id="eventsList" class="mt-4 space-y-3"></ul>
+        <div id="eventsLoading" class="flex justify-center py-8">
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <input type="datetime-local" id="eventDate" class="input input-sm" data-aos="fade-up" data-aos-delay="200">
+        <input id="eventTitle" class="input input-sm" placeholder="Título del evento" data-aos="fade-up" data-aos-delay="250">
+        <select id="eventCategory" class="input input-sm" data-aos="fade-up" data-aos-delay="300">
+          <option value="cita">💕 Cita</option>
+          <option value="aniversario">🎂 Aniversario</option>
+          <option value="viaje">✈️ Viaje</option>
+          <option value="pago">💳 Pago</option>
+          <option value="otro">📌 Otro</option>
+        </select>
+        <button id="addEventBtn" class="btn-primary btn-sm w-full" data-aos="fade-up" data-aos-delay="350">
+          <i data-feather="plus" class="w-4 h-4"></i>
+          Agregar
+        </button>
+      </div>
+    </section>
+
+    <aside class="card" data-aos="fade-up" data-aos-delay="150">
+      <h3 class="card-title">
+        <i data-feather="clock" class="w-6 h-6"></i>
+        Próximos Eventos
+      </h3>
+      <div class="relative">
+        <ul id="upcomingList" class="mt-4 space-y-3"></ul>
+        <div id="upcomingLoading" class="flex justify-center py-8">
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="card lg:col-span-3" data-aos="fade-up" data-aos-delay="200">
+      <h3 class="card-title">
+        <i data-feather="star" class="w-6 h-6"></i>
+        Bienvenido/a 💕
+      </h3>
+      <p class="text-white/70 text-lg leading-relaxed">
+        ¡Comienza a organizar tus momentos especiales! Agrega eventos importantes, 
+        planifica citas románticas y nunca olvides esos días especiales. 
+        Tu calendario de pareja está listo para ayudarte a crear recuerdos inolvidables.
+      </p>
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white/5 rounded-xl p-4 border border-white/10" data-aos="zoom-in" data-aos-delay="250">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center">
+              <i data-feather="heart" class="w-5 h-5 text-brand"></i>
+            </div>
+            <h4 class="font-semibold">Eventos Especiales</h4>
+          </div>
+          <p class="text-white/60 text-sm">Marca fechas importantes y crea momentos memorables</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 border border-white/10" data-aos="zoom-in" data-aos-delay="300">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+              <i data-feather="bell" class="w-5 h-5 text-accent"></i>
+            </div>
+            <h4 class="font-semibold">Recordatorios</h4>
+          </div>
+          <p class="text-white/60 text-sm">Nunca olvides esos días especiales con alertas inteligentes</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4 border border-white/10" data-aos="zoom-in" data-aos-delay="350">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-skysoft/20 flex items-center justify-center">
+              <i data-feather="users" class="w-5 h-5 text-skysoft"></i>
+            </div>
+            <h4 class="font-semibold">Compartir</h4>
+          </div>
+          <p class="text-white/60 text-sm">Mantén sincronizados todos tus planes en pareja</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/config/supabaseClient.js"></script>
+  <script type="module" src="/src/guard.js"></script>
+  <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/calendar.js"></script>
+  
+  <script>
+    // Initialize animations and icons
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-out-cubic'
+      });
+      
+      feather.replace();
+      
+      // Create floating hearts
+      createFloatingHearts();
+      
+      // Add subtle hover effects to all interactive elements
+      document.querySelectorAll('.chip, .btn-primary, .card').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+          this.style.transform = this.style.transform || '';
+        });
+      });
+    });
+
+    function createFloatingHearts() {
+      const container = document.getElementById('floatingHearts');
+      const heartsCount = 15;
+      
+      for (let i = 0; i < heartsCount; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = Math.random() * 5 + 's';
+        heart.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+        container.appendChild(heart);
+      }
+    }
+
+    function showNotification(message, type = 'success') {
+      const toast = document.getElementById('notificationToast');
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      
+      setTimeout(() => {
+        toast.className = 'toast hidden';
+      }, 3000);
+    }
+   
+ (function () {
+  const go404 = () => {
+    if (!location.pathname.endsWith('/404.html')) location.assign('/404.html');
+  };
+
+  const abs = (u) => { try { return new URL(u, document.baseURI); } catch { return null; } };
+  const isSameOrigin = (u) => { const a = abs(u); return a && a.origin === location.origin; };
+
+  let redirected = false;
+  const safe404 = () => {
+    if (redirected) return;
+    redirected = true;
+    setTimeout(go404, 200);
+  };
+
+  // HEAD para confirmar que realmente es un 404 (solo mismo origen por CORS)
+  async function checkIf404(url) {
+    const a = abs(url);
+    if (!a || !isSameOrigin(a.href)) return; // ignorar CDNs/terceros
+    try {
+      const res = await fetch(a.href, {
+        method: 'HEAD',
+        cache: 'no-store',
+        credentials: 'same-origin'
+      });
+      if (res.status === 404) safe404();    // solo 404 ⇒ redirige
+      // 200/301/403/500 ⇒ NO redirige
+    } catch {
+      // offline/CORS/otros fallos ⇒ NO redirige
+    }
+  }
+
+  // Errores de carga de recursos (script/link/img): valida con HEAD si es 404
+  window.addEventListener('error', (e) => {
+    const t = e.target;
+    const isAsset = t instanceof HTMLScriptElement || t instanceof HTMLLinkElement || t instanceof HTMLImageElement;
+    if (!isAsset) return;
+
+    const url = t.tagName === 'LINK' ? t.href : t.src;
+    checkIf404(url);
+  }, true);
+
+  // Promesas rechazadas (p.ej. fetch): solo si exponen status 404
+  window.addEventListener('unhandledrejection', (e) => {
+    const r = e.reason || {};
+    const status = r.status ?? r.response?.status;
+    const url = r.url ?? r.response?.url;
+    if (status === 404 && isSameOrigin(url)) safe404();
+  });
+
+  // (Opcional) Si tu hosting devuelve 200 en rutas desconocidas (SPA fallback),
+  // valida la ruta actual contra una lista de páginas conocidas y confirma con HEAD.
+  const knownPaths = new Set([
+    '/', '/index.html', '/events.html', '/tasks.html', '/notes.html', '/settings.html', '/404.html'
+  ]);
+  if (!knownPaths.has(location.pathname)) {
+    checkIf404(location.pathname);
+  }
+})();
+  </script>
+  
+</body>
+</html>

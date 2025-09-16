@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notas de Amor ❤️ | Calendario de Pareja</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Feather: deja SOLO uno -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script>
+    tailwind.config = { 
+      darkMode:'class', 
+      theme:{ 
+        extend:{ 
+          colors:{ 
+            brand:'#ef476f', 
+            accent:'#6c5ce7', 
+            skysoft:'#5ec3ff', 
+            darkbg:'#0f0b1e', 
+            darkcard:'#1a1530',
+            lovepink:'#ff6b8b',
+            softpurple:'#a78bfa'
+          },
+          boxShadow:{ 
+            soft:'0 10px 30px rgba(0,0,0,.25)', 
+            glow:'0 0 20px rgba(108, 92, 231, .30)',
+            love:'0 8px 25px rgba(239, 71, 111, 0.35)'
+          },
+          animation:{ 
+            'pulse-slow':'pulse 3s cubic-bezier(0.4,0,0.6,1) infinite',
+            'float':'float 6s ease-in-out infinite',
+            'heartbeat':'heartbeat 1.5s ease-in-out infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            heartbeat: {
+              '0%': { transform: 'scale(1)' },
+              '15%': { transform: 'scale(1.1)' },
+              '30%': { transform: 'scale(1)' },
+              '45%': { transform: 'scale(1.05)' },
+              '60%': { transform: 'scale(1)' }
+            }
+          }
+        },
+        fontFamily:{ sans:['Inter','ui-sans-serif','system-ui'] }
+      }
+    }
+  </script>
+
+  <style>
+    :root{ 
+      --brand:#ef476f; 
+      --accent:#6c5ce7; 
+      --card:#1a1530; 
+      --muted:#cbd5e1;
+      --lovepink:#ff6b8b;
+      --softpurple:#a78bfa;
+    }
+
+    body{ 
+      font-family:'Inter',sans-serif;
+      background: linear-gradient(135deg, #0f0b1e 0%, #1b1333 50%, #22163e 100%);
+    }
+
+    /* Floating hearts animation */
+    .floating-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-heart {
+      position: absolute;
+      color: rgba(239, 71, 111, 0.3);
+      font-size: 1.5rem;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    /* Chip del header */
+    .chip{
+      padding:.5rem 1rem;
+      border-radius:.75rem;
+      border:1px solid rgba(255,255,255,.12);
+      color:#e5e7eb;
+      background:rgba(255,255,255,.05);
+      display:inline-flex; 
+      align-items:center; 
+      gap:.5rem;
+      transition:all .3s ease;
+      font-weight:500;
+    }
+    .chip:hover{ 
+      background:linear-gradient(135deg, rgba(239,71,111,.15), rgba(108,92,231,.15));
+      box-shadow:0 8px 25px rgba(108,92,231,.2);
+      transform:translateY(-2px);
+      border-color:rgba(108,92,231,.3);
+    }
+    .chip.active{
+      background:linear-gradient(135deg, var(--brand), var(--accent));
+      box-shadow:0 8px 25px rgba(239,71,111,.3);
+      border-color:transparent;
+    }
+
+    /* Tarjeta principal */
+    .card{
+      background: linear-gradient(135deg, rgba(26,21,48,.95), rgba(32,25,58,.95));
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:1.5rem;
+      padding:2rem;
+      backdrop-filter: blur(20px);
+      box-shadow:0 20px 40px rgba(0,0,0,.3);
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 25px 50px rgba(0,0,0,.4);
+    }
+
+    .card-title{
+      font-weight:800;
+      font-size:1.75rem;
+      display:flex; 
+      align-items:center; 
+      gap:.75rem;
+      background:linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+      -webkit-background-clip:text; 
+      background-clip:text; 
+      -webkit-text-fill-color:transparent;
+      margin-bottom:1.5rem;
+    }
+
+    /* Inputs + botones */
+    .input{
+      width:100%;
+      background:rgba(255,255,255,.08);
+      border:2px solid rgba(255,255,255,.2);
+      border-radius:1rem;
+      padding:.75rem 1.25rem;
+      outline:none; 
+      color:#fff;
+      font-size:1rem;
+      transition:all .3s ease;
+      font-family:inherit;
+    }
+    .input::placeholder{ 
+      color:rgba(255,255,255,.5);
+      font-weight:300;
+    }
+    .input:focus{ 
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(108,92,231,.2);
+      background:rgba(255,255,255,.12);
+    }
+    .input-sm{ height:3rem; }
+
+    .btn-rose{
+      background:linear-gradient(135deg, var(--brand), var(--lovepink));
+      color:#fff;
+      border-radius:1rem;
+      padding:.75rem 1.5rem;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      transition:all .3s ease;
+      box-shadow:0 10px 30px rgba(239,71,111,.3);
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .btn-rose:hover{ 
+      transform:translateY(-3px);
+      box-shadow:0 15px 35px rgba(239,71,111,.4);
+      filter:brightness(1.1);
+    }
+    .btn-rose:active{
+      transform:translateY(-1px);
+    }
+    .btn-sm{ 
+      font-size:.95rem; 
+      padding:.6rem 1.25rem;
+    }
+
+    /* Notas */
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .note-card {
+      background: linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      transition: all .3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .note-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      opacity: .8;
+    }
+
+    .note-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,.3);
+      border-color: rgba(239,71,111,.3);
+    }
+
+    .note-content {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #e5e7eb;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+
+    .note-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .85rem;
+      color: rgba(255,255,255,.6);
+    }
+
+    .note-actions {
+      display: flex;
+      gap: .5rem;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .note-card:hover .note-actions {
+      opacity: 1;
+    }
+
+    .action-btn {
+      padding: .4rem;
+      border-radius: .5rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.8);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(255,255,255,.2);
+      color: #fff;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: rgba(255,255,255,.5);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: rgba(239,71,111,.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card {
+        padding: 1.5rem;
+        border-radius: 1.25rem;
+      }
+      
+      .notes-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .chip {
+        padding: .4rem .75rem;
+        font-size: .9rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp .6s ease-out;
+    }
+
+    /* Fallback por si la keyframe de Tailwind no se inyecta */
+    @keyframes float {
+      0%,100% { transform: translateY(0) }
+      50%     { transform: translateY(-10px) }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-100">
+  <!-- Floating hearts background -->
+  <div class="floating-hearts">
+    <div class="floating-heart" style="left: 10%; animation-delay: 0s;">❤️</div>
+    <div class="floating-heart" style="left: 20%; animation-delay: 2s;">💖</div>
+    <div class="floating-heart" style="left: 30%; animation-delay: 4s;">💕</div>
+    <div class="floating-heart" style="left: 40%; animation-delay: 6s;">💘</div>
+    <div class="floating-heart" style="left: 50%; animation-delay: 1s;">💓</div>
+    <div class="floating-heart" style="left: 60%; animation-delay: 3s;">💗</div>
+    <div class="floating-heart" style="left: 70%; animation-delay: 5s;">💝</div>
+    <div class="floating-heart" style="left: 80%; animation-delay: 7s;">💞</div>
+    <div class="floating-heart" style="left: 90%; animation-delay: 0.5s;">❤️</div>
+  </div>
+
+  <!-- Gradient background -->
+  <div class="fixed inset-0 -z-10 pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1b1333] via-[#22163e] to-[#2b1d52] opacity-95"></div>
+    <div class="absolute -top-32 -left-32 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-brand/40 to-accent/40 animate-pulse-slow"></div>
+    <div class="absolute -bottom-32 -right-32 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-skysoft/40 to-accent/40 animate-pulse-slow" style="animation-delay: 1.5s;"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/10 shadow-lg">
+    <nav class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/index.html" class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-accent text-white shadow-glow animate-heartbeat">
+          <span class="text-xl">❤️</span>
+        </a>
+        <span class="font-extrabold text-xl bg-gradient-to-r from-brand to-accent bg-clip-text text-transparent">Calendario de Pareja</span>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <a class="chip" href="/index.html">
+          <i data-feather="home" class="w-4 h-4"></i>
+          Dashboard
+        </a>
+        <a class="chip" href="/events.html">
+          <i data-feather="calendar" class="w-4 h-4"></i>
+          Eventos
+        </a>
+        <a class="chip" href="/tasks.html">
+          <i data-feather="check-square" class="w-4 h-4"></i>
+          Tareas
+        </a>
+        <a class="chip active" href="/notes.html">
+          <i data-feather="heart" class="w-4 h-4"></i>
+          Notas
+        </a>
+        <a class="chip" href="/settings.html">
+          <i data-feather="settings" class="w-4 h-4"></i>
+          Ajustes
+        </a>
+        <button id="logoutBtn" class="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand to-accent text-white shadow-love hover:shadow-xl transition-all duration-300 hidden">
+          <i data-feather="log-out" class="w-4 h-4"></i>
+          Salir
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div class="card" data-aos="fade-up" data-aos-duration="800">
+      <h2 class="card-title">
+        <i data-feather="heart" class="w-8 h-8"></i>
+        💌 Notas de Amor
+      </h2>
+
+      <p class="text-slate-300 mb-6 text-lg">Comparte mensajes bonitos y recuerdos especiales con tu pareja</p>
+
+      <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div class="relative flex-1">
+          <input id="noteMsg" class="input input-sm" placeholder="Escribe algo bonito para tu amor… 💖" maxlength="200">
+          <div class="absolute bottom-2 right-3 text-xs text-slate-400" id="charCount">0/200</div>
+        </div>
+        <button id="addNoteBtn" class="btn-rose btn-sm">
+          <i data-feather="send" class="w-4 h-4"></i>
+          Enviar con Amor
+        </button>
+      </div>
+
+      <div class="notes-grid" id="notesList">
+        <!-- Notes will be dynamically inserted here -->
+        <div class="empty-state fade-in-up" id="emptyState">
+          <i data-feather="heart" class="w-12 h-12 mx-auto"></i>
+          <h3 class="text-xl font-semibold mb-2">No hay notas aún</h3>
+          <p class="text-slate-400">¡Envía tu primera nota de amor y haz sonreír a tu pareja!</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/config/supabaseClient.js"></script>
+  <script type="module" src="/src/guard.js"></script>
+  <script type="module"src="/src/notes.js"></script>
+   <script> import { supabase } from '/config/supabaseClient.js';
+    
+    // Character counter
+    const noteMsg = document.getElementById('noteMsg');
+    const charCount = document.getElementById('charCount');
+    
+    noteMsg.addEventListener('input', () => {
+      charCount.textContent = `${noteMsg.value.length}/200`;
+    });
+
+    // Notes functionality
+    const notesList = document.getElementById('notesList');
+    const emptyState = document.getElementById('emptyState');
+    const addNoteBtn = document.getElementById('addNoteBtn');
+
+    // Escapar HTML para evitar XSS
+    const escapeHTML = (str = '') =>
+      str.replace(/&/g, '&amp;')
+         .replace(/</g, '&lt;')
+         .replace(/>/g, '&gt;')
+         .replace(/"/g, '&quot;')
+         .replace(/'/g, '&#39;');
+
+    async function loadNotes() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: notes, error } = await supabase
+        .from('notes')
+        .select('*')
+        .or(`user_id.eq.${user.id},partner_id.eq.${user.id}`)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading notes:', error);
+        return;
+      }
+
+      renderNotes(notes || []);
+    }
+
+    function renderNotes(notes) {
+      // Elimina solo tarjetas previas, no el emptyState
+      [...notesList.querySelectorAll('.note-card')].forEach(n => n.remove());
+
+      if (!notes.length) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      notes.forEach(note => {
+        const noteElement = document.createElement('div');
+        noteElement.className = 'note-card fade-in-up';
+        const safeMsg = escapeHTML(note.message ?? '');
+        const fecha = new Date(note.created_at).toLocaleString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        noteElement.innerHTML = `
+          <div class="note-content">${safeMsg}</div>
+          <div class="note-meta">
+            <span>${fecha}</span>
+            <div class="note-actions">
+              <button class="action-btn" onclick="deleteNote('${note.id}')">
+                <i data-feather="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        notesList.appendChild(noteElement);
+      });
+      
+      feather.replace();
+    }
+
+    async function addNote() {
+      const message = noteMsg.value.trim();
+      if (!message) return;
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: partner } = await supabase
+        .from('profiles')
+        .select('partner_id')
+        .eq('id', user.id)
+        .single();
+
+      const { error } = await supabase
+        .from('notes')
+        .insert({
+          message,
+          user_id: user.id,
+          partner_id: partner?.partner_id ?? null
+        });
+
+      if (error) {
+        console.error('Error adding note:', error);
+        return;
+      }
+
+      noteMsg.value = '';
+      charCount.textContent = '0/200';
+      loadNotes();
+    }
+
+    async function deleteNote(noteId) {
+      const { error } = await supabase
+        .from('notes')
+        .delete()
+        .eq('id', noteId);
+
+      if (error) {
+        console.error('Error deleting note:', error);
+        return;
+      }
+
+      loadNotes();
+    }
+
+    addNoteBtn.addEventListener('click', addNote);
+    noteMsg.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addNote();
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+      });
+      feather.replace();
+      loadNotes();
+    });
+
+    // Make functions global for onclick handlers
+    window.deleteNote = deleteNote;
+  </script>
+
+  <script>
+    AOS.init();
+    feather.replace();
+  </script>
+</body>
+</html>
