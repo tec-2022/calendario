@@ -1,16 +1,10 @@
 {
-  "version": 2,
-  "public": true,
-  "builds": [
-    {
-      "src": "public/login.html",
-      "use": "@vercel/static"
-    }
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/", "destination": "/login.html", "permanent": false }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    }
+    { "src": "/(.*)", "dest": "/public/$1" }
   ]
 }
+
